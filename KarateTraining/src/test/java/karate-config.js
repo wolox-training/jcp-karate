@@ -7,10 +7,6 @@ function fn() {
 
   var jsonConfig = read('classpath:src/test/resources/environments.json');
 
-  var config = {
-        env: env,
-        baseUrl: jsonConfig[env].baseUrl
-    }
-  return config;
+  return jsonConfig[env];
 
 }
