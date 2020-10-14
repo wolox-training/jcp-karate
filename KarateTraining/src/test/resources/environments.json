@@ -1,0 +1,12 @@
+{
+  "qa": {
+    "baseUrl": "https://exampleqa.com"
+},
+  "stg": {
+    "baseUrl": "https://exampledev.com"
+  },
+  "dev": {
+    "baseUrl": "https://examplestg.com"
+  }
+
+}

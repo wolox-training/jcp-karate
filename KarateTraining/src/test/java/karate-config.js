@@ -5,7 +5,7 @@ function fn() {
     env = 'qa';
     }
 
-  var jsonConfig = read('classpath:src/main/resources/environments.json');
+  var jsonConfig = read('classpath:src/test/resources/environments.json');
 
   var config = {
         env: env,
