@@ -3,29 +3,21 @@ Feature: Testing the react herokuapp for Sign up users
   Background:
     * url baseUrl
 
+  @postNewUser
   Scenario: Sign up a new user in the app
 
-    * def randomString =
-    """
-    function(nbCharacters) {
-       var text = '';
-       var possible = 'abcdefghijklmnñopqrstuvwxyz0123456789';
-       for(var i = 0; i < nbCharacters; i++) {
-         text += possible.charAt(Math.floor(Math.random() * possible.length));
-       }
-       return text
-    }
-    """
-
-    * def randomEmail = randomString(6) + '@gmail.com'
+    * def func = karate.call('classpath:src/test/RandomStringGenerator.js', [6])
+    * def randomEmail = func + '@gmail.com'
+    * def randomPassword = func
+    * def randomUsername = func
 
     * def user =
       """
       {
         "user": {
            "email": '#(randomEmail)',
-           "password":"ejemplo123",
-           "username": '#(randomString(6))'
+           "password":'#(randomPassword)',
+           "username": '#(randomUsername)'
         }
       }
       """
@@ -34,10 +26,11 @@ Feature: Testing the react herokuapp for Sign up users
     And request user
     When method post
     Then status 200
+    And match response.user['email'] == user['user']['email']
+    And match response.user['username'] == user['user']['username']
 
-    * print ('random email random email random email random email:', randomEmail)
-
-  Scenario: sign up a user with invalid email
+  @postInvalidEmailNewUser
+  Scenario Outline: sign up a user with invalid email
 
     * def user =
       """
@@ -54,11 +47,14 @@ Feature: Testing the react herokuapp for Sign up users
     When method post
     Then status 422
 
-    * def jsonResponse = {"errors":{"email":["is invalid"]}}
-    * match response == jsonResponse
+    And match response == <errors>
 
+    Examples:
+      |errors|
+      |{"errors":{"email":["is invalid"]}}|
 
-  Scenario: sign up a user with invalid/short password
+  @postInvalidPasswordNewUser
+  Scenario Outline: sign up a user with invalid/short password
 
     * def user =
       """
@@ -75,11 +71,14 @@ Feature: Testing the react herokuapp for Sign up users
     When method post
     Then status 422
 
-    * def jsonResponse = {"errors":{"password":["is too short (minimum is 6 characters)"]}}
-    * match response == jsonResponse
+    And match response == <errors>
 
+    Examples:
+      |errors|
+      |{"errors":{"password":["is too short (minimum is 6 characters)"]}}|
 
-  Scenario: sign up a user with empty fields
+  @postEmptyFieldsNewUser
+  Scenario Outline: sign up a user with empty fields
 
     * def user =
       """
@@ -96,6 +95,10 @@ Feature: Testing the react herokuapp for Sign up users
     When method post
     Then status 422
 
-    * def jsonResponse = {"errors":{"email":["can't be blank"],"password":["can't be blank"],"username":["is invalid","can't be blank"]}}
-    * match response == jsonResponse
+    And match response == <errors>
+
+    Examples:
+      |errors|
+      |{"errors":{"email":["can't be blank"],"password":["can't be blank"],"username":["is invalid","can't be blank"]}}|
+
 

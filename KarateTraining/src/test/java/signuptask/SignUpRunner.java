@@ -6,6 +6,6 @@ public class SignUpRunner {
 
     @Karate.Test
     Karate testUsers() {
-        return Karate.run("signup").relativeTo(getClass());
+        return Karate.run().relativeTo(getClass());
     }
 }

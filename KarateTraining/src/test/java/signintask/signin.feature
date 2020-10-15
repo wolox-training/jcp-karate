@@ -3,26 +3,21 @@ Feature: Testing the react herokuapp for Sign in users
   Background:
     * url baseUrl
 
+  @postSignInUser
   Scenario: Sign in user in the app
 
-    * def user =
-      """
-      {
-        "user": {
-           "email": 'hrctri@gmail.com',
-           "password":"ejemplo123",
-           "username": 'pdw4l7'
-        }
-      }
-      """
+    * def user = user
 
-    Given path 'users/login'
+    Given path 'users', 'login'
     And request user
     When method post
     Then status 200
+    And match response.user['email'] == user['user']['email']
+    And match response.user['username'] == user['user']['username']
 
 
-  Scenario: sign in a user with invalid email
+  @postSignInUserInvalidEmail
+  Scenario Outline: sign in a user with invalid email
 
     * def user =
       """
@@ -34,16 +29,19 @@ Feature: Testing the react herokuapp for Sign in users
            }
       """
 
-    Given path 'users/login'
+    Given path 'users', 'login'
     And request user
     When method post
     Then status 422
 
-    * def jsonResponse = {"errors":{"email or password":["is invalid"]}}
-    * match response == jsonResponse
+    And match response == <errors>
 
+    Examples:
+    |errors|
+    |{"errors":{"email or password":["is invalid"]}}|
 
-  Scenario: sign in a user with invalid password
+  @postSignInUserInvalidPassword
+  Scenario Outline: sign in a user with invalid password
 
     * def user =
       """
@@ -56,16 +54,19 @@ Feature: Testing the react herokuapp for Sign in users
       }
       """
 
-    Given path 'users/login'
+    Given path 'users', 'login'
     And request user
     When method post
     Then status 422
 
-    * def jsonResponse = {"errors":{"email or password":["is invalid"]}}
-    * match response == jsonResponse
+    And match response == <errors>
 
+    Examples:
+      |errors|
+      |{"errors":{"email or password":["is invalid"]}}|
 
-  Scenario: sign in a user with empty fields
+  @postSignInUserEmptyFields
+  Scenario Outline: sign in a user with empty fields
 
     * def user =
       """
@@ -77,11 +78,14 @@ Feature: Testing the react herokuapp for Sign in users
            }
       """
 
-    Given path 'users/login'
+    Given path 'users', 'login'
     And request user
     When method post
     Then status 422
 
-    * def jsonResponse = {"errors":{"email or password":["is invalid"]}}
-    * match response == jsonResponse
+    And match response == <errors>
+
+    Examples:
+      |errors|
+      |{"errors":{"email or password":["is invalid"]}}|
 
