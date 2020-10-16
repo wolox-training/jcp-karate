@@ -12,22 +12,18 @@ Feature: Testing the react herokuapp for Sign in users
     And request user
     When method post
     Then status 200
-    And match response.user['email'] == user['user']['email']
-    And match response.user['username'] == user['user']['username']
+    Then match response == {"user":{"id":'#number',"email":'#string',"username":'#string',"bio":null,"image":null,"token":'#string'}}
+    And assert response.user['email'] == user['user']['email']
+    And assert response.user['username'] == user['user']['username']
 
 
   @postSignInUserInvalidEmail
   Scenario Outline: sign in a user with invalid email
 
-    * def user =
-      """
-      {
-        "user": {
-           "email": "hrctrigmail.com",
-           "password":"ejemplo123",
-           "username":"pdw4l7"}
-           }
-      """
+    * def signInErrorResponse = read('classpath:src/test/resources/signinInvalidResponse.json')
+
+    * def user = { "user": { "email": '#(email)', "password": '#(password)', "username": '#(username)'}}
+
 
     Given path 'users', 'login'
     And request user
@@ -36,56 +32,18 @@ Feature: Testing the react herokuapp for Sign in users
 
     And match response == <errors>
 
+    @invalidEmail
     Examples:
-    |errors|
-    |{"errors":{"email or password":["is invalid"]}}|
+      |errors                                 | email                   | password   | username           |
+      |signInErrorResponse['invalidResponse'] | ejemplo123890@gmail.com | ejemplo123 | ejemploNewUsername |
 
-  @postSignInUserInvalidPassword
-  Scenario Outline: sign in a user with invalid password
-
-    * def user =
-      """
-      {
-        "user": {
-           "email": "hrctri@gmail.com",
-           "password":"ejemplo1",
-           "username":"pdw4l7"
-        }
-      }
-      """
-
-    Given path 'users', 'login'
-    And request user
-    When method post
-    Then status 422
-
-    And match response == <errors>
-
+    @invalidPassword
     Examples:
-      |errors|
-      |{"errors":{"email or password":["is invalid"]}}|
+      |errors                                 | email            | password | username |
+      |signInErrorResponse['invalidResponse'] | hrctri@gmail.com | ejemplo1 | pdw4l7   |
 
-  @postSignInUserEmptyFields
-  Scenario Outline: sign in a user with empty fields
-
-    * def user =
-      """
-      {
-        "user": {
-           "email": "",
-           "password":"",
-           "username":""}
-           }
-      """
-
-    Given path 'users', 'login'
-    And request user
-    When method post
-    Then status 422
-
-    And match response == <errors>
-
+    @emptyFields
     Examples:
-      |errors|
-      |{"errors":{"email or password":["is invalid"]}}|
+      |errors                                | email | password | username |
+      |signInErrorResponse['invalidResponse']| ""    | ""       | ""       |
 

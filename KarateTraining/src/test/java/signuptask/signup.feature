@@ -26,21 +26,15 @@ Feature: Testing the react herokuapp for Sign up users
     And request user
     When method post
     Then status 200
-    And match response.user['email'] == user['user']['email']
-    And match response.user['username'] == user['user']['username']
+    Then match response == {"user":{"id":'#number',"email":'#string',"username":'#string',"bio":null,"image":null,"token":'#string'}}
+    And assert response.user['email'] == user['user']['email']
+    And assert response.user['username'] == user['user']['username']
 
-  @postInvalidEmailNewUser
-  Scenario Outline: sign up a user with invalid email
+  @postInvalidNewUser
+  Scenario Outline: sign up a user with invalid fields
 
-    * def user =
-      """
-      {
-        "user": {
-           "email": "ejemplo2gmail.com",
-           "password":"ejemplo123",
-           "username":"ejemploejemplo"}
-           }
-      """
+    * def user = { "user": { "email": '#(email)',"password": '#(password)',"username":'#(username)'}}
+    * def signUpErrorResponse = read('classpath:src/test/resources/signupInvalidResponse.json')
 
     Given path 'users'
     And request user
@@ -49,56 +43,17 @@ Feature: Testing the react herokuapp for Sign up users
 
     And match response == <errors>
 
+    @invalidEmail
     Examples:
-      |errors|
-      |{"errors":{"email":["is invalid"]}}|
+      |errors                             | email                  | password    | username           |
+      |signUpErrorResponse['invalidEmail']| ejemplo2345gmail.com | ejemplo123    | ejemploNewUsername |
 
-  @postInvalidPasswordNewUser
-  Scenario Outline: sign up a user with invalid/short password
-
-    * def user =
-      """
-      {
-        "user": {
-           "email": "ejemplo44@gmail.com",
-           "password":"eje",
-           "username":"ejemplo44"}
-           }
-      """
-
-    Given path 'users'
-    And request user
-    When method post
-    Then status 422
-
-    And match response == <errors>
-
+    @invalidPassword
     Examples:
-      |errors|
-      |{"errors":{"password":["is too short (minimum is 6 characters)"]}}|
+      |errors                                | email                 | password | username             |
+      |signUpErrorResponse['invalidPassword']| ejemplo2345@gmail.com | eje      | ejemploejemplo1234   |
 
-  @postEmptyFieldsNewUser
-  Scenario Outline: sign up a user with empty fields
-
-    * def user =
-      """
-      {
-        "user": {
-           "email": "",
-           "password":"",
-           "username":""}
-           }
-      """
-
-    Given path 'users'
-    And request user
-    When method post
-    Then status 422
-
-    And match response == <errors>
-
+    @emptyFields
     Examples:
-      |errors|
-      |{"errors":{"email":["can't be blank"],"password":["can't be blank"],"username":["is invalid","can't be blank"]}}|
-
-
+      |errors                             | email | password | username |
+      |signUpErrorResponse['emptyFields'] |  ""   | ""       | ""       |
