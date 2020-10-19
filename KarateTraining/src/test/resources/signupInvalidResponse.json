@@ -1,0 +1,25 @@
+{
+  "invalidEmail": {
+    "errors": {
+      "email": ["is invalid"]
+    }
+  },
+  "invalidPassword": {
+    "errors": {
+      "password": ["is too short (minimum is 6 characters)"]
+    }
+  },
+  "emptyFields": {
+    "errors": {
+      "email": [
+        "is invalid"
+      ],
+      "password": [
+        "is too short (minimum is 6 characters)"
+      ],
+      "username": [
+        "is invalid"
+      ]
+    }
+  }
+}
