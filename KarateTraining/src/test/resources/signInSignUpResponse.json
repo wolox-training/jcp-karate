@@ -3,8 +3,8 @@
     "id":"#number",
     "email":"#string",
     "username":"#string",
-    "bio":null,
-    "image":null,
+    "bio":"##string",
+    "image":"##string",
     "token":"#string"
   }
 }

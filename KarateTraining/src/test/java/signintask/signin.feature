@@ -30,7 +30,6 @@ Feature: Testing the react herokuapp for Sign in users
     When method post
     Then status 422
     Then match response['errors'] == signInInvalidSchema['errors']
-
     And match response == <errors>
 
     @invalidEmail
@@ -47,4 +46,3 @@ Feature: Testing the react herokuapp for Sign in users
     Examples:
       |errors                                | email | password | username |
       |signInErrorResponse['invalidResponse']| ""    | ""       | ""       |
-
