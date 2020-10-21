@@ -6,6 +6,6 @@ public class SignUpRunner {
 
     @Karate.Test
     Karate testUsers() {
-        return Karate.run().relativeTo(getClass());
+        return Karate.run("classpath:java/signuptask").relativeTo(getClass());
     }
 }
