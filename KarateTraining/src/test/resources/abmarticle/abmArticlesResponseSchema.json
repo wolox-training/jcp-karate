@@ -1,0 +1,12 @@
+{
+  "tagList":"#[] ##string",
+  "createdAt":"#string",
+  "author": "#abmArticlesAuthorSchema",
+  "description":"#string",
+  "title":"#string",
+  "body":"#string",
+  "favoritesCount":"#number",
+  "slug":"#string",
+  "updatedAt":"#string",
+  "favorited":"#boolean"
+}
