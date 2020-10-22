@@ -1,10 +1,11 @@
 {
   "article": {
-    "title": "Anabelle",
-    "description": "Anabelle Description",
-    "body": "Anabelle Body",
+    "title": "Terminator",
+    "description": "Terminator Description",
+    "body": "Terminator Body",
     "tagList": [
-      "Terror"
+      "Action",
+      "Robots"
     ]
   }
 }

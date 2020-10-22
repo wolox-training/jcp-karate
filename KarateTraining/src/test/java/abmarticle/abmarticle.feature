@@ -1,66 +1,28 @@
-Feature: Testing the react herokuapp for creation , modification and removal
+Feature: Testing the react Conduit-API for creation and modification
 
   Background:
     * url baseUrl
     * def token = authInfo.accessToken
 
-  @CreateNewArticle
-  Scenario: Create a new article
+  @createAndUpdateAnArticle
+  Scenario: Create and update a new article
 
-    * def article = read('classpath:abmarticle/abmNewArticleRequest.json')
+    * def createANewArticle = call read('abmCreateArticle.feature@createNewArticle')
+    * def newArticleResponseSlug = createANewArticle.response.article.slug
+    * def article = read('classpath:resources/abmarticle/abmPutArticleRequest.json')
 
-    Given path 'articles'
+    Given path 'articles', newArticleResponseSlug
     And request article
-    And header Authorization = token
-    When method post
-    Then status 200
-    Then match response == read('classpath:abmarticle/abmNewArticleResponseSchema.json')
-    And assert response.article['title'] == article['article']['title']
-    And assert response.article['description'] == article['article']['description']
-    And assert response.article['body'] == article['article']['body']
-    And def getActualArticles = call read('abmarticle.feature@getAllArticles')
-    And def addedArticle = karate.jsonPath(getActualArticles.response, "$.articles[?(@.title=='" + article['article'].title + "')]")[0]
-    And assert addedArticle.title == response.article['title']
-    And assert addedArticle.body == response.article['body']
-    And assert addedArticle.description == response.article['description']
-
-
-  @putAUser
-  Scenario Outline: Put a new article in a specific slug
-
-    * def getArticles = call read('abmarticle.feature@getAllArticles')
-    * def random = function(max) { return Math.floor(Math.random() * max) + 1}
-    * def randomIndex = random (getArticles.response['articles'].length)
-
-    Given path 'articles', <slug>
-    And request <article>
     And header Authorization = token
     When method put
     Then status 200
-    Then match response == read('classpath:abmarticle/abmNewArticleResponseSchema.json')
-    And assert response.article['title'] == <article>['article']['title']
-    And assert response.article['description'] == <article>['article']['description']
-    And assert response.article['body'] == <article>['article']['body']
-    And def getActualArticles = call read('abmarticle.feature@getAllArticles')
-    And assert getActualArticles.response.articles[randomIndex]['title'] == response.article['title']
-    And assert getActualArticles.response.articles[randomIndex]['body'] == response.article['body']
-    And assert getActualArticles.response.articles[randomIndex]['description'] == response.article['description']
-
-    @putANewArticle
-    Examples:
-      |slug                                            | article                                                          |
-      |getArticles.response.articles[randomIndex].slug | read('classpath:resources/abmarticle/abmPutArticleRequest.json') |
-
-    @putToOriginalArticle
-    Examples:
-      |slug                                            | article                                                          |
-      |getArticles.response.articles[randomIndex].slug | read('classpath:resources/abmarticle/abmNewArticleRequest.json') |
-
-  @getAllArticles
-  Scenario: Get all the articles from articles list
-
-    Given path 'articles'
-    When method get
-    Then status 200
-    Then def getArticlesSchema = read('classpath:abmarticle/abmGetArticlesResponseSchema.json')
-    Then match each response[*]['articles'] == getArticlesSchema
+    And match response == read('classpath:resources/abmarticle/abmNewArticleResponseSchema.json')
+    And assert response.article['title'] == article['article']['title']
+    And assert response.article['description'] == article['article']['description']
+    And assert response.article['body'] == article['article']['body']
+    And def updatedArticleSlug = response.article['slug']
+    And def getActualArticles = karate.call('getArticles.feature@getArticleBySlug', {'slug': updatedArticleSlug})
+    And def updatedArticle = karate.jsonPath(getActualArticles.response, "$.articles[?(@.slug=='" + updatedArticleSlug + "')]")
+    And assert updatedArticle[0].title == response.article.title
+    And assert updatedArticle[0].body == response.article.body
+    And assert updatedArticle[0].description == response.article.description
