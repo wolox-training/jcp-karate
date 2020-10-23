@@ -1,4 +1,4 @@
 {
-  "articles": "#[] abmArticlesResponseSchema",
-  "articlesCount": "#number"
+  "articlesCount": "#number",
+  "articles": "#[] abmArticlesResponseSchema"
 }

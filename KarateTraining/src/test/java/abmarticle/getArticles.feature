@@ -3,6 +3,8 @@ Feature: Testing the react herokuapp for creation , modification and removal
 
   Background:
     * url baseUrl
+    * def abmArticlesResponseSchema = read('classpath:abmarticle/abmArticlesResponseSchema.json')
+    * def getArticlesSchema = {articlesCount: '#number',articles: '#[] abmArticlesResponseSchema'}
 
   @getAllArticles
   Scenario: Get all the articles from articles list
@@ -10,8 +12,8 @@ Feature: Testing the react herokuapp for creation , modification and removal
     Given path 'articles'
     When method get
     Then status 200
-    And def getArticlesSchema = read('classpath:abmarticle/abmGetArticlesResponseSchema.json')
     And match each response[*]['articles'] == getArticlesSchema
+    And match response == getArticlesSchema
 
 
   @getArticleBySlug
@@ -20,5 +22,4 @@ Feature: Testing the react herokuapp for creation , modification and removal
     Given path 'articles', slug
     When method get
     Then status 200
-    And def getArticlesSchema = read('classpath:abmarticle/abmGetArticlesResponseSchema.json')
-    And match each response[*]['article'] == getArticlesSchema
+    And match response['article'] == abmArticlesResponseSchema

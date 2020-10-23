@@ -20,8 +20,7 @@ Feature: Testing the react Conduit-API for creation and modification
     And assert response.article['title'] == article['title']
     And assert response.article['description'] == article['description']
     And assert response.article['body'] == article['body']
-    And def updatedArticleSlug = response.article['slug']
-    And def getArticleBySlug = karate.call('getArticles.feature@getArticleBySlug', {'slug': updatedArticleSlug})
+    And def getArticleBySlug = call read('getArticles.feature@getArticleBySlug') {slug: '#(response.article.slug)'}
     And assert getArticleBySlug.response.article.title == response.article.title
     And assert getArticleBySlug.response.article.body == response.article.body
     And assert getArticleBySlug.response.article.description == response.article.description

@@ -1,7 +1,12 @@
 {
   "tagList":"#[] ##string",
   "createdAt":"#string",
-  "author": "#abmArticlesAuthorSchema",
+  "author": {
+    "username": "#string",
+    "bio": "##string",
+    "image": "#string",
+    "following": "#boolean"
+  },
   "description":"#string",
   "title":"#string",
   "body":"#string",
