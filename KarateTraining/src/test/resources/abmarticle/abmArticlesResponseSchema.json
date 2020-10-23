@@ -1,0 +1,17 @@
+{
+  "tagList":"#[] ##string",
+  "createdAt":"#string",
+  "author": {
+    "username": "#string",
+    "bio": "##string",
+    "image": "#string",
+    "following": "#boolean"
+  },
+  "description":"#string",
+  "title":"#string",
+  "body":"#string",
+  "favoritesCount":"#number",
+  "slug":"#string",
+  "updatedAt":"#string",
+  "favorited":"#boolean"
+}

@@ -1,0 +1,11 @@
+{
+  "article": {
+    "title": "Terminator",
+    "description": "Terminator Description",
+    "body": "Terminator Body",
+    "tagList": [
+      "Action",
+      "Robots"
+    ]
+  }
+}

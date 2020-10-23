@@ -1,0 +1,4 @@
+{
+  "articlesCount": "#number",
+  "articles": "#[] abmArticlesResponseSchema"
+}

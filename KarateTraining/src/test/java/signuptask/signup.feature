@@ -18,7 +18,7 @@ Feature: Testing the react herokuapp for Sign up users
     And request user
     When method post
     Then status 200
-    Then match response == read('classpath:signInSignUpResponse.json')
+    Then match response == read('classpath:signinsignup/signInSignUpResponse.json')
     And assert response.user['email'] == user['user']['email']
     And assert response.user['username'] == user['user']['username']
     And def signIn = call read('classpath:src/test/java/signintask/signin.feature@postSignInUser')
@@ -27,8 +27,8 @@ Feature: Testing the react herokuapp for Sign up users
   Scenario Outline: sign up a user with invalid fields
 
     * def user = { "user": { "email": '#(email)',"password": '#(password)',"username":'#(username)'}}
-    * def signUpErrorResponse = read('signupInvalidResponse.json')
-    * def signUpInvalidSchema = read('classpath:signUpInvalidResponseSchema.json')
+    * def signUpErrorResponse = read('signinsignup/signupInvalidResponse.json')
+    * def signUpInvalidSchema = read('classpath:signinsignup/signUpInvalidResponseSchema.json')
 
     Given path 'users'
     And request user
